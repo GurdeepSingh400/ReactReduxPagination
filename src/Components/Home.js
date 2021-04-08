@@ -1,6 +1,6 @@
-import React, {useState, useEffect } from 'react';
-import { addToCart } from '../Services/Actions/Actions'
-import {  useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { Delete, addToCart } from '../Services/Actions/Actions'
+import { useSelector, useDispatch } from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,37 +12,45 @@ import Pagination from '@material-ui/lab/Pagination';
 
 import { Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
+import ShowData from './ShowData';
 
 
 
 const Home = () => {
   const dispatch = useDispatch()
 
-  const  Finaldata = useSelector(state=> state.cardItems.cardData.data)
-  console.log(Finaldata,"final data ")
-  const page=useSelector(state=>state.cardItems.cardData.totalPages)
-const [data,setData]=useState([]);
+  const Finaldata = useSelector(state => state.cardItems.cardData.data)
+  console.log(Finaldata, "final data ")
+  const page = useSelector(state => state.cardItems.totalPages)
+  console.log(page, "pagessssssssssssssssssss")
+  const [data, setData] = useState([]);
+  console.log(data, "datanews")
 
-const handleperpage=(i,j)=>{
-  dispatch(addToCart(j))
-}
+  const [showpage, setshowpage] = useState(false);
 
-  
+
+  const handleperpage = (i, j, index) => {
+    dispatch(addToCart(j))
+
+  }
+
+
 
   useEffect(() => {
     dispatch(addToCart(1))
     addToCart();
-  },[])
 
-  useEffect(()=>{
-    if(Finaldata)
-    {
+
+  }, [])
+
+  useEffect(() => {
+    if (Finaldata) {
       setData(Finaldata);
     }
-    else{
+    else {
       setData([])
     }
-  },[Finaldata])
+  }, [Finaldata])
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -54,51 +62,80 @@ const handleperpage=(i,j)=>{
 
   const classes = useStyles();
 
+  const [editdata, setEditData] = useState({
+    name: "",
+    trips: "",
+    id: "",
+    country: "",
+    established: "",
+    head_quaters: ""
+  });
 
+  console.log(editdata, "neweditdatasssssssssssssssssssssssssssssssssss")
 
   return (
     <>
+      {showpage ? null :
+        <div>
+          <TableContainer >
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>id</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Trips</TableCell>
+                  <TableCell>id</TableCell>
+                  <TableCell>Logo</TableCell>
+                  <TableCell>Country</TableCell>
+                  <TableCell>Established</TableCell>
+                  <TableCell>Headquaters</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((index, j) => {
+                  return (<TableRow key={index._id} >
+                    <TableCell>{j}</TableCell>
+                    <TableCell>{index.name}</TableCell>
+                    <TableCell>{index.trips}</TableCell>
+                    <TableCell>{index._id}</TableCell>
+                    <TableCell> <a href={`https://${index.airline.website}`} target="#"  > <img src={index.airline.logo} /> </a></TableCell>
+                    <TableCell>{index.airline.country}</TableCell>
+                    <TableCell>{index.airline.established}</TableCell>
+                    <TableCell>{index.airline.head_quaters}</TableCell>
+                    <TableCell> <Button variant="contained" color="primary" onClick={() => dispatch(Delete(index._id))}> Delete</Button>
+                    </TableCell>
+                    <TableCell><Button variant="contained" onClick={() => {
+                      setshowpage(true);
+                        setEditData({
+                        id: index._id,
+                        name: index.name,
+                        country: index.airline.country,
+                        trips: index.trips,
+                        established:index.established,
+                        head_quaters:index.head_quaters
 
-   
+                      })
+                    }}
+                    >Edit</Button></TableCell>
+                  </TableRow>)
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Pagination count={page} onChange={handleperpage}></Pagination>
 
-        <TableContainer >
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>id</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Trips</TableCell>
-            <TableCell>Country</TableCell>
-            <TableCell>Established</TableCell>
-            <TableCell>Headquaters</TableCell>
-            <TableCell>website</TableCell>
-            
-          </TableRow>
-        </TableHead>
-        <TableBody>
-        {data.map((index,j)=>{
-          return (<TableRow>
-              <TableCell>{j}</TableCell>
-              <TableCell>{index.name}</TableCell>
-              <TableCell>{index.trips}</TableCell>
-              <TableCell>{index.airline.country}</TableCell>
-              <TableCell> {index.airline.established}</TableCell>
-              <TableCell> {index.airline.head_quaters}</TableCell>
-              <TableCell> {index.airline.website}</TableCell>
+        </div>}
 
-        
-              
-            </TableRow>)})}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    <Pagination count={page} onChange={handleperpage}></Pagination>
+      { showpage ? <ShowData setshowpage={setshowpage}
+        setEditData={setEditData}
+        editdata={editdata}
+      /> : null}
 
+      {/* editTable ? <ShowTable  setEditTable={setEditTable}/> : null} */}
 
-       
-
-  
     </>
+
   )
 }
 export default Home;
