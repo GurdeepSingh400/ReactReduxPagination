@@ -39,8 +39,8 @@ export default function carditems(state = initialState,action){
         case Edit_Button :{
             console.log(state,"Editbtn")
             console.log(' action.payload', action.payload)
-            debugger
-            const editdata = state.cardData.data.filter((editvalues) => {return (editvalues._id.includes(action.payload))} )
+         
+            const editdata = state.cardData.data.filter((editvalues) => {return (editvalues._id == (action.payload.id))} )
 
             // if(id = pad.){
                 
@@ -48,9 +48,15 @@ export default function carditems(state = initialState,action){
             console.log(editdata,"editdata")
             // console.log(editvalues,"editvalues")
             
-            //  editdata[0].name = action.payload.name;
+             editdata[0].name = action.payload.name;
+             console.log( editdata[0].name,"namessssssssssssssssssssssss")
+             editdata[0].trips = action.payload.trips;
+             console.log( editdata[0].trips,"tripssssssssssssssssssssss")
+           
+             
+           
 
-            // editdata[0].name = action.payload.name;
+           
         }
         return({
 

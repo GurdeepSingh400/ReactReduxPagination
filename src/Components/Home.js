@@ -65,8 +65,8 @@ const Home = () => {
   const [editdata, setEditData] = useState({
     name: "",
     trips: "",
-    id: "",
     country: "",
+    id: "",
     established: "",
     head_quaters: ""
   });
@@ -108,12 +108,13 @@ const Home = () => {
                     <TableCell><Button variant="contained" onClick={() => {
                       setshowpage(true);
                         setEditData({
-                        id: index._id,
+                 
                         name: index.name,
                         country: index.airline.country,
                         trips: index.trips,
-                        established:index.established,
-                        head_quaters:index.head_quaters
+                        id:index._id,
+                        established:index.airline.established,
+                        head_quaters:index.airline.head_quaters
 
                       })
                     }}

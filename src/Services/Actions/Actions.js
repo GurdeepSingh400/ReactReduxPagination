@@ -3,6 +3,7 @@ import axios from 'axios'
 import {Add_To_Cart} from '../Constants'
 import {Delete_Button} from '../Constants'
 import {Edit_Button} from '../Constants'
+// import { dispatch } from "react-redux"
 
 export const addToCart = (i,count)=>dispatch =>{
 
@@ -34,7 +35,7 @@ export const Delete = (index) =>  {
 
 
 export const Edit = (index) => dispatch => {
-  debugger
+
   return dispatch({
       type : Edit_Button,
       payload : index
